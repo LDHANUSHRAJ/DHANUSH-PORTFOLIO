@@ -1,146 +1,198 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { ArrowUpRight, Palette, Cpu, Zap, Globe } from "lucide-react";
+import { useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowLeft, ArrowRight, Code2, Brain, Rocket, Globe } from "lucide-react";
 
-gsap.registerPlugin(ScrollTrigger);
-
-const luxuryExpertise = [
+const expertise = [
     {
-        title: "Flexible & Precise Manufacturing",
-        description: "I turn ideas into high-quality products by blending advanced technology with craftsmanship — covering web, mobile, 3D, and more. Flexible execution with consistent quality across every project.",
-        image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop",
-        icon: <Palette className="w-6 h-6" />,
-        features: [
-            "Rapid prototyping & iteration cycles.",
-            "Multi-platform development expertise.",
-            "Scalable architecture from day one.",
-            "End-to-end product ownership.",
-        ]
+        id: "01",
+        title: "AI & Machine Learning",
+        category: "INTELLIGENCE_SYSTEMS",
+        description: "Building intelligent applications powered by AI — from chatbots and recommendation engines to predictive models. I integrate modern AI APIs and custom models to create smart, responsive user experiences.",
+        icon: <Brain className="w-8 h-8" />,
+        skills: ["AI API Integration", "Chatbot Development", "Prompt Engineering", "Intelligent Automation"],
+        color: "#5a7d9a"
     },
     {
-        title: "Digital Ecosystems & AI",
-        description: "I build intelligent digital platforms and AI-driven solutions that enhance user engagement and provide seamless interactive experiences across all touchpoints.",
-        image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop",
-        icon: <Zap className="w-6 h-6" />,
-        features: [
-            "AI-powered interactive applications.",
-            "High-end web & mobile experiences.",
-            "Scalable back-end infrastructure.",
-            "Data-driven design & analytics.",
-        ]
+        id: "02",
+        title: "Full-Stack Development",
+        category: "DIGITAL_ENGINEERING",
+        description: "End-to-end web and mobile development using modern frameworks. From architecting scalable back-ends to crafting pixel-perfect front-ends, I deliver complete digital products that perform.",
+        icon: <Code2 className="w-8 h-8" />,
+        skills: ["Next.js / React", "Node.js / Express", "Firebase / Supabase", "TypeScript"],
+        color: "#5a7d9a"
     },
     {
-        title: "Communication & Brand Systems",
-        description: "I craft communication-first digital experiences — transforming brand identity into cohesive narratives through design, messaging, and interactive events.",
-        image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=2070&auto=format&fit=crop",
-        icon: <Globe className="w-6 h-6" />,
-        features: [
-            "Brand identity & visual systems.",
-            "Interactive campaign experiences.",
-            "Consulting on digital communication.",
-            "Design systems & component libraries.",
-        ]
+        id: "03",
+        title: "Entrepreneurship & Products",
+        category: "VENTURE_BUILDING",
+        description: "Serial builder — from EataCup (edible zero-waste cups) to Vanguard Digital (tech consultancy). I turn ideas into scalable ventures, managing everything from concept and MVP to launch and growth.",
+        icon: <Rocket className="w-8 h-8" />,
+        skills: ["Product Strategy", "MVP Development", "Market Research", "Digital Ventures"],
+        color: "#5a7d9a"
+    },
+    {
+        id: "04",
+        title: "Interactive Experiences",
+        category: "CREATIVE_TECHNOLOGY",
+        description: "Creating immersive, high-impact digital experiences using Three.js, GSAP, and advanced animations. I design motion-rich interfaces that captivate users and elevate brands above the noise.",
+        icon: <Globe className="w-8 h-8" />,
+        skills: ["Three.js / WebGL", "GSAP Animations", "Motion Design", "Creative UI/UX"],
+        color: "#5a7d9a"
     }
 ];
 
 export default function HorizontalGallery() {
-    const wrapperRef = useRef<HTMLDivElement>(null);
+    const [current, setCurrent] = useState(0);
     const trackRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const wrapper = wrapperRef.current;
-        const track = trackRef.current;
-        if (!wrapper || !track) return;
-
-        const ctx = gsap.context(() => {
-            const totalScroll = track.scrollWidth - window.innerWidth;
-
-            gsap.to(track, {
-                x: -totalScroll,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: wrapper,
-                    pin: true,
-                    scrub: 1,
-                    start: "top top",
-                    end: () => "+=" + totalScroll,
-                    invalidateOnRefresh: true,
-                },
-            });
-        }, wrapper);
-
-        return () => ctx.revert();
-    }, []);
+    const goTo = (index: number) => {
+        const clamped = Math.max(0, Math.min(index, expertise.length - 1));
+        setCurrent(clamped);
+        if (trackRef.current) {
+            const card = trackRef.current.children[clamped] as HTMLElement;
+            card?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        }
+    };
 
     return (
-        <div ref={wrapperRef} className="overflow-hidden bg-[#f2f2f2]">
-            {/* Section Header — in normal flow, no overlap */}
-            <div className="px-10 md:px-24 pt-24 pb-10">
-                <p className="text-[10px] font-bold tracking-[0.5em] uppercase text-[#5a7d9a] mb-4">
-                    Our Expertise
-                </p>
-                <h2 className="text-5xl md:text-7xl font-black luxury-text text-[#333333] italic">
-                    The Art of{" "}
-                    <span className="not-italic text-[#5a7d9a]">Creation</span>
-                </h2>
+        <section className="py-24 bg-[#f2f2f2] overflow-hidden">
+            {/* Header */}
+            <div className="px-6 md:px-16 mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <span className="text-[10px] font-black tracking-[0.5em] uppercase text-[#5a7d9a] block mb-4">
+                        [ CORE_EXPERTISE ]
+                    </span>
+                    <h2 className="text-5xl md:text-7xl font-black luxury-text text-[#333333] leading-none">
+                        WHAT I<br />
+                        <span className="italic text-[#5a7d9a]">BUILD</span>
+                    </h2>
+                </div>
+
+                {/* Navigation */}
+                <div className="flex items-center gap-4">
+                    <span className="text-[10px] font-black tracking-widest text-[#333333]/30 uppercase mr-4">
+                        {String(current + 1).padStart(2, "0")} / {String(expertise.length).padStart(2, "0")}
+                    </span>
+                    <button
+                        onClick={() => goTo(current - 1)}
+                        disabled={current === 0}
+                        className="w-12 h-12 rounded-full border border-[#333333]/10 flex items-center justify-center hover:border-[#5a7d9a] hover:text-[#5a7d9a] transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+                    >
+                        <ArrowLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                        onClick={() => goTo(current + 1)}
+                        disabled={current === expertise.length - 1}
+                        className="w-12 h-12 rounded-full bg-[#333333] text-white flex items-center justify-center hover:bg-[#5a7d9a] transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+                    >
+                        <ArrowRight className="w-5 h-5" />
+                    </button>
+                </div>
             </div>
 
-            {/* Horizontal scroll track */}
+            {/* Cards Track - CSS scroll-snap, no GSAP */}
             <div
                 ref={trackRef}
-                className="flex gap-8 px-10 md:px-24 pb-16"
-                style={{ width: "max-content" }}
+                className="flex gap-6 px-6 md:px-16 overflow-x-auto pb-6"
+                style={{
+                    scrollSnapType: "x mandatory",
+                    scrollbarWidth: "none",
+                    msOverflowStyle: "none",
+                    WebkitOverflowScrolling: "touch",
+                }}
             >
-                {luxuryExpertise.map((item, index) => (
-                    <div
-                        key={index}
-                        className="w-[80vw] md:w-[65vw] flex-shrink-0 bg-white rounded-[40px] border border-[#333333]/5 overflow-hidden flex flex-col md:flex-row shadow-sm"
-                        style={{ height: "60vh", minHeight: 380 }}
+                {expertise.map((item, i) => (
+                    <motion.div
+                        key={item.id}
+                        onClick={() => setCurrent(i)}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.1, duration: 0.6 }}
+                        className="flex-shrink-0 cursor-pointer"
+                        style={{
+                            scrollSnapAlign: "start",
+                            width: "clamp(280px, 75vw, 540px)",
+                        }}
                     >
-                        {/* Image */}
-                        <div className="w-full md:w-2/5 h-48 md:h-full relative overflow-hidden flex-shrink-0">
-                            <img
-                                src={item.image}
-                                alt={item.title}
-                                className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-                        </div>
+                        <div
+                            className={`relative h-full min-h-[480px] rounded-[32px] p-8 md:p-10 flex flex-col gap-6 border transition-all duration-500 ${i === current
+                                    ? "bg-[#333333] border-[#333333] text-white shadow-2xl"
+                                    : "bg-white border-[#333333]/5 text-[#333333] hover:border-[#5a7d9a]/30"
+                                }`}
+                        >
+                            {/* Number */}
+                            <span
+                                className={`text-[11px] font-black tracking-[0.4em] uppercase ${i === current ? "text-[#5a7d9a]" : "text-[#5a7d9a]"
+                                    }`}
+                            >
+                                {item.id}
+                            </span>
 
-                        {/* Text */}
-                        <div className="flex flex-col justify-center p-8 md:p-12 gap-6">
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full border border-[#5a7d9a]/20 flex items-center justify-center text-[#5a7d9a]">
-                                    {item.icon}
-                                </div>
-                                <h3 className="text-2xl md:text-3xl font-black luxury-text text-[#333333] leading-tight">
-                                    {item.title}
-                                </h3>
+                            {/* Icon */}
+                            <div
+                                className={`w-16 h-16 rounded-2xl flex items-center justify-center ${i === current ? "bg-white/10" : "bg-[#f2f2f2]"
+                                    }`}
+                                style={{ color: "#5a7d9a" }}
+                            >
+                                {item.icon}
                             </div>
 
-                            <p className="text-sm text-[#666666] leading-relaxed font-medium">
+                            {/* Category */}
+                            <span
+                                className={`text-[9px] font-black tracking-[0.4em] uppercase ${i === current ? "text-white/40" : "text-[#333333]/30"
+                                    }`}
+                            >
+                                {item.category}
+                            </span>
+
+                            {/* Title */}
+                            <h3 className="text-2xl md:text-3xl font-black luxury-text leading-tight">
+                                {item.title}
+                            </h3>
+
+                            {/* Description */}
+                            <p
+                                className={`text-sm leading-relaxed font-medium flex-grow ${i === current ? "text-white/70" : "text-[#666666]"
+                                    }`}
+                            >
                                 {item.description}
                             </p>
 
-                            <ul className="space-y-3">
-                                {item.features.map((f, i) => (
-                                    <li key={i} className="flex items-start gap-3 text-xs font-bold tracking-wide text-[#333333]/60 uppercase">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-[#5a7d9a] mt-1 flex-shrink-0" />
-                                        {f}
-                                    </li>
+                            {/* Skills */}
+                            <div className="flex flex-wrap gap-2 mt-auto">
+                                {item.skills.map((skill) => (
+                                    <span
+                                        key={skill}
+                                        className={`px-3 py-1.5 rounded-full text-[9px] font-black tracking-widest uppercase ${i === current
+                                                ? "bg-white/10 text-white/70"
+                                                : "bg-[#f2f2f2] text-[#333333]/50"
+                                            }`}
+                                    >
+                                        {skill}
+                                    </span>
                                 ))}
-                            </ul>
-
-                            <button className="flex items-center gap-2 text-[10px] font-black tracking-[0.3em] uppercase text-[#5a7d9a] hover:opacity-60 transition-opacity mt-auto w-fit">
-                                Explore <ArrowUpRight className="w-4 h-4" />
-                            </button>
+                            </div>
                         </div>
-                    </div>
+                    </motion.div>
                 ))}
             </div>
-        </div>
+
+            {/* Dots */}
+            <div className="flex justify-center gap-3 mt-8">
+                {expertise.map((_, i) => (
+                    <button
+                        key={i}
+                        onClick={() => goTo(i)}
+                        className={`rounded-full transition-all duration-300 ${i === current
+                                ? "w-8 h-2 bg-[#5a7d9a]"
+                                : "w-2 h-2 bg-[#333333]/10 hover:bg-[#5a7d9a]/40"
+                            }`}
+                    />
+                ))}
+            </div>
+        </section>
     );
 }
