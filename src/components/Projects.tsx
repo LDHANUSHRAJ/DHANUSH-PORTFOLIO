@@ -39,28 +39,29 @@ export default function Projects() {
     useEffect(() => {
         if (!sectionRef.current || !triggerRef.current) return;
 
-        const pin = gsap.fromTo(
-            sectionRef.current,
-            { translateX: 0 },
-            {
-                translateX: "-200vw",
-                ease: "none",
-                duration: 1,
-                scrollTrigger: {
-                    trigger: triggerRef.current,
-                    start: "top top",
-                    end: () => `+=${window.innerWidth * 2}`,
-                    scrub: 0.6,
-                    pin: true,
-                    anticipatePin: 1,
-                    invalidateOnRefresh: true
+        // Use gsap.context so ONLY this component's triggers are reverted on cleanup
+        const ctx = gsap.context(() => {
+            gsap.fromTo(
+                sectionRef.current!,
+                { translateX: 0 },
+                {
+                    translateX: "-200vw",
+                    ease: "none",
+                    duration: 1,
+                    scrollTrigger: {
+                        trigger: triggerRef.current,
+                        start: "top top",
+                        end: () => `+=${window.innerWidth * 2}`,
+                        scrub: 0.6,
+                        pin: true,
+                        anticipatePin: 1,
+                        invalidateOnRefresh: true
+                    }
                 }
-            }
-        );
-        return () => {
-            pin.kill();
-            ScrollTrigger.getAll().forEach(t => t.kill());
-        };
+            );
+        }, triggerRef);
+
+        return () => ctx.revert();
     }, []);
 
     return (
