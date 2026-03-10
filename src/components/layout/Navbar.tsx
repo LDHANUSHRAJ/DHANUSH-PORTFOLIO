@@ -6,8 +6,10 @@ import Link from "next/link";
 export default function Navbar() {
     const navItems = [
         { name: "HOME", href: "#hero" },
+        { name: "STORY", href: "#story" },
         { name: "PROJECTS", href: "#track" },
-        { name: "EXPERTISE", href: "#skills" },
+        { name: "SKILLS", href: "#skills" },
+        { name: "EXPERIMENTS", href: "#off-track" },
         { name: "CONTACT", href: "#contact" },
     ];
 
