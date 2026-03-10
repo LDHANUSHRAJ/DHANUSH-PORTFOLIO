@@ -5,6 +5,7 @@ import StartupTimeline from "@/components/StartupTimeline";
 import Contact from "@/components/Contact";
 import SocialLinks from "@/components/SocialLinks";
 import StorytellingStrip from "@/components/StorytellingStrip";
+import HorizontalGallery from "@/components/HorizontalGallery";
 
 export default function Home() {
   return (
@@ -21,6 +22,8 @@ export default function Home() {
         </section>
 
         <StorytellingStrip />
+
+        <HorizontalGallery />
 
         <section id="projects" className="bg-white">
           <Projects />
